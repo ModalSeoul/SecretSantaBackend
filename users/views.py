@@ -2,12 +2,17 @@ from django.shortcuts import render
 from rest_framework import viewsets, permissions
 
 from .models import User
-from .serializers import UserSerializer
+from .serializers import UserSerializer, CreateUserSerializer
 
 
 class UserView(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+    def get_serializer_class(self):
+        if self.action == 'create':
+            return CreateUserSerializer
+        return UserSerializer
 
     def get_queryset(self):
         user = self.request.user
